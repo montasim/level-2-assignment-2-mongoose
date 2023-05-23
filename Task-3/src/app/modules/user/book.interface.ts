@@ -3,10 +3,12 @@ export interface IBook {
   author: string[];
   genre: string;
   publicationYear: number;
-  publisher: {
-    name: string;
-    location: string;
-  };
+  publisher: [
+    {
+      name: string;
+      location: string;
+    }
+  ];
   reviews: [
     {
       user: string;
