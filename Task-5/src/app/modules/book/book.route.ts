@@ -9,8 +9,7 @@ const router = express.Router();
 
 router.get('/genre/:genre', findBooksUsingGenre);
 router.get('/genre/:genre/publisher/:publisher', findBooksByGenreAndPublisher);
-router.get('getFeaturedBooks', findFeaturedBooks);
-router.patch('updateBooksPrice', updateBooksPrice);
-
+router.get('/getFeaturedBooks', findFeaturedBooks);
+router.patch('/updateBooksPrice', updateBooksPrice);
 
 export default router;
