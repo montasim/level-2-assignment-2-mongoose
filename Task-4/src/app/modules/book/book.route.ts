@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.get('/genre/:genre', findBooksUsingGenre);
 router.get('/genre/:genre/publisher/:publisher', findBooksByGenreAndPublisher);
-router.get('getFeaturedBooks', findFeaturedBooks)
+router.get('/getFeaturedBooks', findFeaturedBooks)
 
 export default router;
