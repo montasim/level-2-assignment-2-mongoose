@@ -5,7 +5,7 @@ let cors = require('cors')
 const app : Application = express();
 
 // application routes
-import bookRoutes from './app/modules/user/book.route';
+import bookRoutes from './app/modules/book/book.route';
 
 // using cors
 app.use(cors());
