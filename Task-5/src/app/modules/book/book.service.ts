@@ -35,24 +35,26 @@ export const getFeaturedBooks = async () => {
 
 export const updateBooksPriceToInt = async () => {
     try {
-      const booksToUpdate = await Book.aggregate([
-        { $match: { publicationYear: { $gt: 2020 }, price: { $type: 'string' } } },
-        { $addFields: { price: { $toInt: '$price' } } }
-      ]);
-  
-      const updateOps = booksToUpdate.map(book => ({
-        updateOne: {
-          filter: { _id: book._id },
-          update: { $set: { price: book.price } }
-        }
-      }));
-  
-      const updatedBooksPrice = await Book.bulkWrite(updateOps);
-  
-      return updatedBooksPrice;
+        const booksToUpdate = await Book.updateMany(
+            { $and: [
+                    { publicationYear: { $gt: 2020 } },
+                    { "price": { $type: "string" } }
+                ]
+            },
+            [
+                {
+                    $set: {
+                        price: {
+                            $toInt: "$price"
+                        }
+                    }
+                }
+            ]
+        )
+
+        return booksToUpdate;
     } catch (error) {
-      console.error('Error updating book prices:', error);
-      throw error;
+        console.error('Error updating book prices:', error);
+        throw error;
     }
-  }
-  
+}

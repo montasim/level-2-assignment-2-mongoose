@@ -18,6 +18,7 @@ const BookSchema = new Schema<IBook>({
     ],
     rating: { type: Number, required: true },
     price: { type: String, required: true },
+    featured: { type: String, required: false },
 });
 
 interface IBookModel extends Model<IBook> {
@@ -28,15 +29,16 @@ BookSchema.statics.findFeaturedBooks = async function (): Promise<IBook[]> {
     try {
         const featuredBooks = await this.find({ rating: { $gte: 4 } });
 
-        featuredBooks.forEach((book) => {
+        const updatedFeaturedBooks = featuredBooks.map((book) => {
             if (book.rating >= 4.5) {
                 book.featured = 'BestSeller';
             } else {
                 book.featured = 'Popular';
             }
+            return book;
         });
 
-        return featuredBooks;
+        return updatedFeaturedBooks;
     } catch (error) {
         // Handle error
         console.error('Error finding featured books:', error);
