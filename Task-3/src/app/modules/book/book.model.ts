@@ -1,10 +1,5 @@
-import { Schema, model } from 'mongoose';
-import { IBook } from './book.interface'
-
-// Interface for the Book document
-
-
-// Schema for the Book collection
+import {Schema, model, Model, Query} from 'mongoose';
+import { IBook} from "./book.interface";
 const BookSchema = new Schema<IBook>({
     title: { type: String, required: true },
     author: { type: [String], required: true },
@@ -22,9 +17,33 @@ const BookSchema = new Schema<IBook>({
     ],
     rating: { type: Number, required: true },
     price: { type: String, required: true },
+    featured: { type: String, required: false },
 });
 
-// Create and export the Book model
-const Book = model<IBook>('Book', BookSchema);
+interface IBookModel extends Model<IBook> {
+    findFeaturedBooks(): Query<IBook[], IBook>;
+}
+
+BookSchema.statics.findFeaturedBooks = async function (): Promise<IBook[]> {
+    try {
+        const featuredBooks = await this.find({ rating: { $gte: 4 } });
+
+        const updatedFeaturedBooks = featuredBooks.map((book) => {
+            if (book.rating >= 4.5) {
+                book.featured = 'BestSeller';
+            } else {
+                book.featured = 'Popular';
+            }
+            return book;
+        });
+
+        return updatedFeaturedBooks;
+    } catch (error) {
+        // Handle error
+        console.error('Error finding featured books:', error);
+        throw error;
+    }
+};
+const Book = model<IBook, IBookModel>('Book', BookSchema);
 
 export { Book };

@@ -15,4 +15,5 @@ export interface IBook {
   ];
   rating: number;
   price: string;
+  featured: string;
 }
